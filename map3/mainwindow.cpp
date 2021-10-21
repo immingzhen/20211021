@@ -195,41 +195,43 @@ class filter_data{
 
         return f_data;
     }
-   QVector<QVector<int>> sort_data(QVector<QStringList> oldd)
-       {
-       QVector<QVector<int>> sort;
+    QVector<int> sort_data(QVector<QStringList> oldd)
+           {
+           QVector<int> sort_tuna(39);
 
 
-        for (int i=0 ; i<oldd.size();i++){
-            qDebug()<<i<<"IIIIIIII"<<endl;
-            for(int j=0;j<12;j++){
-                QStringList a1_date=oldd[i][0].split('-');
-                qDebug()<<j<<"JJJJJJJJJJJJ"<<endl;
-                qDebug()<<a1_date<<"al"<<endl;
-                int b = atoi(a1_date[1].toStdString().c_str());
-                qDebug()<<b<<"BBBBBBBBBBBBBBBB"<<endl;
-                if(atoi(a1_date[1].toStdString().c_str())==(j+1)){
-                    if (oldd[i][2]=="tuna"){
+            for (int i=0 ; i<oldd.size();i++){
+                qDebug()<<i<<"IIIIIIII"<<endl;
+                for(int j=0;j<12;j++){
+                    QStringList a1_date=oldd[i][0].split('-');
+                    qDebug()<<j<<"JJJJJJJJJJJJ"<<endl;
+                    qDebug()<<a1_date<<"al"<<endl;
 
-                        sort[j][0]++;
-                        qDebug()<<"1"<<endl;
+                    if(atoi(a1_date[1].toStdString().c_str())==(j+1)){
+                        if (oldd[i][2]=="tuna"){
+
+                            sort_tuna[j]+=1;
+                            sort_tuna[12]+=1;
+                            qDebug()<<"1"<<endl;
+                        }
+                        if (oldd[i][2]=="shark"){
+                            sort_tuna[j+13]+=1;
+                            sort_tuna[25]+=1;
+                            qDebug()<<"2"<<endl;
+                        }
+                        if (oldd[i][2]=="marlin"){
+                            sort_tuna[j+26]+=1;
+                            sort_tuna[38]+=1;
+                            qDebug()<<"3"<<endl;
+                        }
+
                     }
-                    if (oldd[i][2]=="shark"){
-                        qDebug()<<"sharkkkkkkkkkk"<<endl;
-                        sort[j][1]++;
-                        qDebug()<<"2"<<endl;
-                    }
-                    if (oldd[i][2]=="marlin"){
-                        sort[j][2]++;
-                        qDebug()<<"3"<<endl;
-                    }
-
                 }
-            }
-       }
-        qDebug() << sort[8]<< Qt::endl;
-        return sort;
-       }
+           }
+
+            qDebug() <<sort_tuna<< Qt::endl;
+            return sort_tuna;
+           }
 
     private:
 
@@ -424,33 +426,25 @@ void MainWindow::plot_map(){
 
     qDebug()<<*d_data<<"mingzhennnnnnnnnbbb"<<endl;
 
-   //checkcol
-    /*if (d_data->size()!=0)
-    {
-     //int col = d_data->size();
-
-     /*QVector<QVector<int>> *sort= new QVector<QVector<int>>;
-     qDebug()<<*d_data<<"mingzhennnnnnnnnbbb11"<<endl;
-     sort->append(ss->sort_data(*d_data));
-     qDebug()<<*sort<<"mingzhennnnnnnnnbffffffffffffffffffffffffffffffffffffffffffffffbb"<<endl;
-    }
-    else
-    {}*/
+    QVector<int> *sort_tuna= new QVector<int>;
+         qDebug()<<*d_data<<"mingzhennnnnnnnnbbb11"<<endl;
+         sort_tuna->append(ss->sort_data(*d_data));
+         qDebug()<<*sort_tuna<<"mingzhennnnnnnnnbffffffffffffffffffffffffffffffffffffffffffffffbb"<<endl;
 
 
 
     //Plotttttt
     QBarSet *set0 = new QBarSet("Tuna");
-    QBarSet *set1 = new QBarSet("Marlin");
-    QBarSet *set2 = new QBarSet("Shark");
+    QBarSet *set1 = new QBarSet("Shark");
+    QBarSet *set2 = new QBarSet("Marlin");
 
 
     //Tuna
-    *set0 << 1 << 2 << 3 << 4 << 5 << 6 << 6 << 7 << 9 << 10 << 11 << 12;
-    //Marlin
-    *set1 << 5 << 0 << 0 << 4 << 0 << 7 << 7 << 5 << 6 << 6 << 7 << 9 ;
+    *set0 << (*sort_tuna)[0] << (*sort_tuna)[1] << (*sort_tuna)[2] << (*sort_tuna)[3] << (*sort_tuna)[4] << (*sort_tuna)[5] << (*sort_tuna)[6] << (*sort_tuna)[7] << (*sort_tuna)[8] << (*sort_tuna)[9] << (*sort_tuna)[10] << (*sort_tuna)[11];
     //Shark
-    *set2 << 3 << 5 << 8 << 13 << 8 << 5 << 0 << 4 << 0 << 7 << 7 << 5 ;
+    *set1 << (*sort_tuna)[13] << (*sort_tuna)[14] << (*sort_tuna)[15] << (*sort_tuna)[16] << (*sort_tuna)[17] << (*sort_tuna)[18] << (*sort_tuna)[19] << (*sort_tuna)[20] << (*sort_tuna)[21] << (*sort_tuna)[22] << (*sort_tuna)[23] << (*sort_tuna)[24] ;
+    //Marlin
+    *set2  << (*sort_tuna)[26] << (*sort_tuna)[27] << (*sort_tuna)[28] << (*sort_tuna)[29] << (*sort_tuna)[30] << (*sort_tuna)[31] << (*sort_tuna)[32] << (*sort_tuna)[33] << (*sort_tuna)[34] << (*sort_tuna)[35] << (*sort_tuna)[36]<< (*sort_tuna)[37];
 
 
     QBarSeries *series = new QBarSeries();
@@ -482,7 +476,7 @@ void MainWindow::plot_map(){
 
     //Barchart///////////
     QBarSet *set21 = new QBarSet("Number");
-    *set21 << 15 << 30 <<40;
+    *set21 << (*sort_tuna)[12] << (*sort_tuna)[25] <<(*sort_tuna)[38];
 
     QBarSeries *series2 = new QBarSeries();
     series2->append(set21);
@@ -494,7 +488,7 @@ void MainWindow::plot_map(){
     chart2->legend()->setVisible(false);
 
     QStringList categories2;
-    categories2 <<"Marlin"<<"Shark"<<"Tuna";
+    categories2 <<"Tuna"<<"Shark"<<"Marlin";
     QBarCategoryAxis *axis2 = new QBarCategoryAxis();
     axis2->append(categories2);
     chart2->createDefaultAxes();
@@ -589,6 +583,12 @@ void MainWindow::plot_map(int i){
 
     d_data->append(ss->filter_date(*ffilter_data,ui->dateEdit->date(),ui->dateEdit_2->date()));
     qDebug() <<date_a.toString("yyyy-MM-dd")<<date_b.toString("yyyy-MM-dd")<< endl;
+
+    QVector<int> *sort_tuna= new QVector<int>;
+         qDebug()<<*d_data<<"mingzhennnnnnnnnbbb11"<<endl;
+         sort_tuna->append(ss->sort_data(*d_data));
+         qDebug()<<*sort_tuna<<"mingzhennnnnnnnnbffffffffffffffffffffffffffffffffffffffffffffffbb"<<endl;
+
 
     for(int i=0;i<d_data->length();i++){
          //qDebug() <<"www"<<i<< endl;
